@@ -1,0 +1,76 @@
+import { MovieReviews } from "../shared/types";
+
+export const movieReviews: MovieReviews[] = [
+  {
+    movieId: 848326,
+    reviewName: "mooney240",
+    rating: 6,
+    content:
+      "**Rebel Moon is a flawed space epic that can’t compete with Star Wars or Dune but offers some fun for genre fans that don’t take it too seriously.**\r\n\r\nRebel Moon adds the small, growing resistance struggling against a galactic tyrannical empire of Star Wars to the small village searching for a band of noble warriors to save them of Seven Samurai (or the Magnificent Seven or The Three Amigos), but falls short of capturing the greatness of its inspirations. However, while Rebel Moon Part One might be self-aggrandizing and annoyingly predictable, it’s still a fun movie. Director Zack Snyder skillfully constructs a visually stunning universe, filled with vibrant colors and innovative creature effects. Although the characters lack substantial backstories, they still manage to captivate the audience's curiosity. Snyder also cleverly includes intriguing hints that would undoubtedly entice viewers to return for a potential sequel. Despite grappling with shallow writing and occasional subpar CGI, Rebel Moon successfully held my interest, kept me entertained, and left me willing to give Part Two a chance.",
+    reviewDate: "2023-12-23",
+  },
+  {
+    movieId: 848326,
+    reviewName: "BornKnight",
+    rating: 6,
+    content:
+      "Another Zack Snyder movie another wave of haters, so nothing new here.\r\n\r\nI found it pretty well done, the CGI is magnificent on some points; the choice for protagonist as Sofia Boutella (Atomic Blonde) was the best? No. But it isn't so bad. For a movie that is to be his version of SW it isn't bad... reminds me a bit a medieval / western space opera with a Warhammer 40.000 touch. \r\n\r\nAbout being a SW or Seven Samurai \"copy\"..... really? So what? People can tell the movies the way they want, so nothing is absolutely new nowadays, it isn't mind blowing but decent. It is like invalidating SW because we had ST before or Gallactica almost at the same year.\r\n\r\nMy greatest gripe about the movie isn't about the interval between this one and the second movie (April 18th, 2024) so yeah almost two to three years for the complete Trilogy if it hits the public well. \r\n\r\nThe gripe was to put a final fight against the guy that seemed to be the main villain, turns out he is like Darth Maul in the end, and yeah with a confront in the end to have some more action. The real Darth Vader (let's not speak of SW Emperor here because he was the excuse to continue the trilogies). Generally speaking the trio of Snyder (too ambitious), Kurt Johnstad (300 - is ok) and Shay Hatten (John Wick 3 and 4... that almost don't have story) isn't a good choice.\r\n\r\nVisually speaking beside the pseudo-archaic western / samurai setdown (including a bar fight) I found it was an ok choice especially being in the outside worlds of the Empire. Acting was ok, Boutella could have replaced by another actress more charismatic - about the others not much to be said as it is and introduction and gathering of heroes (or rebels if you like the way the title says). Each one have a distinct personality and background yet to be seen.\r\n\r\nThe CGI and practical effects and prosthetics are very nice - Anthony Hopkins as the robot is just really 5 minutes of the movie yet to be seen. The visual of the ships reminded me of those 70's japanese space opera (yep, Space Battleship Yamato it is with other references) with a Warhammer 40k touch to the villains. \r\n\r\nThe edition is good (Dody Dorn of Memento) and Junkie Xl (or Tom Holkenborg - that works mostly with adventure movies) is an ok choice but without any memorable music here.\r\n\r\nOut of the weak ending fight scene (or rush in the history maybe to generate more interest and income for the other two movies) for this one no reason for a major gripe about this one.\r\n\r\nThe biggest let downs are this and the cooldown to see more in more than one year only. And I have a small feeling that all the trilogy won't be enough to fill and the spots left open into characters and development into the story if are all 6 hours total. This is a point that a better screenplay would be needed.\r\n\r\nSo let's wait a \"bit\" more to see where it leads. From my point of view a 6.5 out of 10.0 / B- for now. \r\n\r\nDon't listen to the Snyder haters, watch and judge for yourself - I had more a 70's japanese space opera feeling for this one than SW.",
+    reviewDate: "2023-12-23",
+  },
+  {
+    movieId: 848326,
+    reviewName: "msbreviews",
+    rating: 7,
+    content:
+      "A good attempt to see how close one can get to Star Wars without getting sued. Better than Star Wars movies of late. Great Dark Souls spider boss fight. Everything kind of blends together after spider boss. A nice way to spend an hour before getting up, wandering around, passively experiencing explosions and plot details.",
+    reviewDate: "2023-12-24",
+  },
+  {
+    movieId: 572802,
+    reviewName: "msbreviews",
+    rating: 6,
+    content:
+      "FULL SPOILER-FREE REVIEW @ https://fandomwire.com/aquaman-and-the-lost-kingdom-review/\r\n\r\n\"Aquaman and the Lost Kingdom is a 'fine' farewell to the DCEU. Jason Momoa and Patrick Wilson's amusing chemistry offers plenty of entertaining moments, as their characters' complex relationship takes center stage as the primary thematic force. Mostly consistent from a visual standpoint, featuring well-executed set pieces that will leave the more action-addicted fans satisfied.\r\n\r\nNevertheless, the overreliance on exposition, a messy narrative structure, and other minor yet questionable decisions detract from the overall cohesiveness of the story. As the final installment, it's a pretty accurate mirror that reflects the highs and lows of the cinematic universe as a whole.\r\n\r\nWhile far from a mind-blowing send-off, it encapsulates the essence of the DCEU - a journey filled with few triumphs, many missed opportunities, and incomprehensible disasters.\"\r\n\r\nRating: B-",
+    reviewDate: "2023-12-21",
+  },
+  {
+    movieId: 572802,
+    reviewName: "Geronimo1967",
+    rating: 6,
+    content:
+      'So here\'s good old "Arthur" (Jason Momoa) sitting around the house playing nursemaid to his young son with his wife "Mera" (Amber Heard) whilst all in his underwater kingdom is peaceful. Well not for long! "Black Manta" (Yahya Abdul-Mateen II) is still a tad narked after the last film (five years ago!) and now armed with an useful geek "Dr. Shin" (Randall Park) sets out to discover a secret trident that will enable him to destroy "Atlantis" altogether and maybe also release the long captive "Kordax" (wasn\'t that the stuff they used to make telephone cables from?) to help make his revenge complete. Initially hopelessly outgunned by his nemesis\'s sonic gun, he has to resort to the drastic step of rescuing his imprisoned brother "Orm" (Patrick Wilson) - whom you may recall he was instrumental in deposing and incarcerating in the first place; and hoping that he will join forces with them, "Atlanna" (Nicole Kidman) and "King Nereus" (an almost unrecognisable Dolph Lundgren). With battles lines drawn the films goes from "Narnia" to "Middle Earth" via the "Lost World" and even a bit of "Ice Station Zebra" for a series of ploddingly slow and disappointing set-piece adventures. To be fair, the last half hour does lift the pace a little, but by then I\'m not sure if it wasn\'t all just a rather too late. Momoa is trying very hard here, but he\'s no Dwayne Johnson, and even the dulcets of John Rhys-Davies as the "Brine King" - with or without his claw - can\'t really raise this from it\'s pretty weak and feeble doldrums. Of course it looks good, loads of quality CGI and visual effects, but the story is light and overly strung out for two hours that really did feel more like two days at times. It\'s harmless fodder for Christmas cinema with very little to actually dislike about it - it\'s just the latest in a series of equally forgettable super-hero films that I suspect will leave no impact at all in the snow afterwards.',
+    reviewDate: "2023-12-24",
+  },
+  {
+    movieId: 572802,
+    reviewName: "justhappytobehere",
+    rating: 4,
+    content:
+      "Not clear who this movie was made for. Perhaps somewhat worth it to see Khal Drogo get piss dumped into his gaping mouth 3 or so times (twice human, once octopus), but otherwise this is another shit show. There is something particularly obnoxious about these super hero movies that strut around with such confidence while being so incredibly stupid and intellectually bankrupt. Perhaps if this was clearly aimed at children it could be forgiven, whatever, kids will laugh at anything, but when they insist that the bulk of the adult population be amused by this...",
+    reviewDate: "2024-01-26",
+  },
+  {
+    movieId: 695721,
+    reviewName: "Geronimo1967",
+    rating: 7,
+    content:
+      'I couldn\'t help wondering if Francis Lawrence had just asked for that "Tom fella..." "You know..." The casting director didn\'t realise he meant that "Tom fella" from "Harry Potter" and got Tom Blyth instead. There\'s an uncanny resemblance with the blonde floppy hair and the rather linear facial expressions. Indeed, despite a promising (if frustrating) shower scene at the top of the film, Blyth ("Coryo") is really what drags this otherwise quite decent action adventure film down. Rachel Zegler, on the other hand, is full of enthusiasm as her "Lucy Gray" character is selected to fight for District 12 in the "Hunger Games". Meantime, "Dean Highbottom" (the infrequently used Peter Dinklage) has come up with a way to spike the dwindling television ratings. He has decided to allocate one of his top students to mentor each of the captives. Yep - "Coryo" is put with "Lucy Gray". A bit of sabotage changes the nature of the game and gradually our hero starts to wonder if he is on the right side - especially when he becomes a little too emotionally involved with his protégé and attracts the enmity of his own erstwhile mentor. Luckily, the whole scenario is being overseen by the hammily menacing "Volumnia Gaul" (Viola Davis) who is clearly having a ball with industrial scale make up and a barrel of genetically modified snakes. The last twenty minutes smacks a little too much of sequel building, but this film has plenty of action and intrigue, loads of back-stabbing and just a little moralising. Zegler delivers a few folky style ballads confidently and generally does a lively enough job keeping it quite a bit better than I was expecting. It needs a cinema, though - the grand scale effects and photography work best that way. On the television it will probably just come across as a bit derivative.',
+    reviewDate: "2023-11-23",
+  },
+  {
+    movieId: 695721,
+    reviewName: "austinmgray",
+    rating: 8,
+    content:
+      "one of the best installments to the Hunger Games series. it’s definitely the darkest and most political entry to the saga. act III could have been more fleshed out, but it doesn’t detract from the story the film is telling. act III was the most compelling segments in aspects of Coriolanus Snow’s villain origins. \r\n\r\nif you're a fan of political dramas or a character study or just a huge fan of the Hunger Games series, this is the film for you. excellent casting, excellent music, and deliciously evil performances.",
+    reviewDate: "2023-11-25",
+  },
+  {
+    movieId: 695721,
+    reviewName: "mooney240",
+    rating: 5,
+    content:
+      "With its heartbreaking origin story that depicts the fall of President Snow, **The Hunger Games: The Ballad of Songbirds and Snakes** is the ideal masterpiece of a frightening origin story collection. The adaptation of the novel to the movie was done so well that it is really remarkable. A very high quality cinematography is present.  Rachel Zegler is the personification of Lucy Gray, while Tom Blyth is a leading man. \r\n\r\nWhat an amazing experience it was! The whole auditorium was sitting on the edge of their seats, completely silent, and just appreciating the movie. Everything in the film was flawless, including the narrative, the acting, the music, and the allusions.\r\n\r\nIn the first place, I feel it is necessary to offer my daughter, Rachel Zegler, some praise. Her performance as Lucy Gray gave the impression that she had actually torn her off the page. Rachel did a wonderful job of portraying Lucy Gray, who was the epitome of perfection, and I don't believe anybody else could have achieved the same level of success. Rachel's singing is even more incredible than her acting, by a significant margin. It is common knowledge that Rachel is an incredible vocalist, but the way she sings in this film leaves me feeling as if I had never heard her voice before. She is such a powerhouse of an actor, and I am so thrilled to watch her succeed in this production. The fact that she sang everything live on set is another reason why I am so proud of her. In my view, this is without a doubt her finest performance so far. \r\n\r\nFollowing that, I feel compelled to call attention to the outstanding performance that Tom Blyth gave as Snow. He did a fantastic job of taking what Donald Sutherland had done with the role and giving it his own spin while still making it his own interpretation of the character. On Snow, Tom was able to bring out both the charming and the insane aspects of her personality. I found his acting to be particularly noteworthy in the third act of the movie, particularly the moment in which he was seen in the woods with Lucy Gray. The manner in which Tom was able to incorporate everything of Snow's inner monologue that is shown to us in the novel into his facial expressions was absolutely stunning. He did an excellent job in this function. \r\n\r\nWhen it comes to this film, there are a lot of other things that I could simply enthuse about. Every single one of the other performers had outstanding performances, and they were all outstanding. On top of that, the music is really fantastic. It is impossible for me to adequately express why I feel the desire to have the music of this movie infused into my veins. The soundtrack was so powerful that it brought tears to my eyes even at the very beginning of the film, when there was nothing that was really occurring at that point!!!! In addition, I would like to draw attention to the outstanding costume design that was done for this film.\r\n\r\nThis movie brought us back into the realm of Panem, and it seemed as if we had never left! There were so many things and individuals that worked together to make this happen. The movie was really stunning, thanks to the stunning performances, locations, costumes, and music that Olivia Rodrigo contributed, among other things.\r\n\r\nSince the first nostalgic film in the series, which was released in 2012 and starred Jennifer Lawrence as the legendary songbird mockingjay herself, Katniss Everdeen, this has quickly become my favorite installment in the series. All things considered, this is a smashing success for moviegoers and movie aficionados alike; you should not miss it when it is shown on the big screen.",
+    reviewDate: "2023-12-24",
+  },
+];

@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/rest-api.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/rest-api.ts & npx ts-node --prefer-ts-exts bin/auth-app.ts",
   "watch": {
     "include": ["**"],
     "exclude": [

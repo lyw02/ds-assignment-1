@@ -92,8 +92,8 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     movieReviewsTable.grantWriteData(postNewReviewFn);
 
     // REST API
-    const api = new apig.RestApi(this, 'RestApi', {
-      description: 'Movie reviews API',
+    const appApi = new apig.RestApi(this, 'AppApi', {
+      description: 'App API',
       deployOptions: {
         stageName: 'dev',
       },
@@ -106,7 +106,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     });
 
     // Endpoints
-    const moviesEndpoint = api.root.addResource('movies');
+    const moviesEndpoint = appApi.root.addResource('movies');
     const postReviewEndpoint = moviesEndpoint.addResource('reviews');
     const specificMovieEndpoint = moviesEndpoint.addResource('{movieId}');
     const reviewsEndpoint = specificMovieEndpoint.addResource('reviews');

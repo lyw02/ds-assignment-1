@@ -22,13 +22,13 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     });
 
     // Functions
-    const getAllMovieReviewsFn = new lambdanode.NodejsFunction(
+    const getMovieReviewsFn = new lambdanode.NodejsFunction(
       this,
-      'GetAllMovieReviewsFn',
+      'GetMovieReviewsFn',
       {
         architecture: lambda.Architecture.ARM_64,
         runtime: lambda.Runtime.NODEJS_18_X,
-        entry: `${__dirname}/../lambdas/getAllMovieReviews.ts`,
+        entry: `${__dirname}/../lambdas/getMovieReviews.ts`,
         timeout: cdk.Duration.seconds(10),
         memorySize: 128,
         environment: {
@@ -71,7 +71,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     });
 
     // Permissions
-    movieReviewsTable.grantReadData(getAllMovieReviewsFn);
+    movieReviewsTable.grantReadData(getMovieReviewsFn);
     movieReviewsTable.grantWriteData(postNewReviewFn);
 
     // REST API
@@ -90,11 +90,12 @@ export class RestAPIAssignmentStack extends cdk.Stack {
 
     // Endpoints
     const moviesEndpoint = api.root.addResource('movies');
-    const reviewsEndpoint = moviesEndpoint.addResource('reviews');
+    const specificMovieEndpoint = moviesEndpoint.addResource('{movieId}');
+    const reviewsEndpoint = specificMovieEndpoint.addResource('reviews');
 
     reviewsEndpoint.addMethod(
       'GET',
-      new apig.LambdaIntegration(getAllMovieReviewsFn, {proxy: true}),
+      new apig.LambdaIntegration(getMovieReviewsFn, {proxy: true}),
     );
 
     reviewsEndpoint.addMethod(

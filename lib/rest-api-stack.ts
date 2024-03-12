@@ -73,8 +73,8 @@ export class RestAPIAssignmentStack extends cdk.Stack {
 
     // Endpoints
     const moviesEndpoint = api.root.addResource('movies');
-    // const reviewsEndpoint = moviesEndpoint.addResource('reviews');
-    moviesEndpoint.addMethod(
+    const reviewsEndpoint = moviesEndpoint.addResource('reviews');
+    reviewsEndpoint.addMethod(
       'GET',
       new apig.LambdaIntegration(getAllMovieReviewsFn, {proxy: true}),
     );

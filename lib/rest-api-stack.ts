@@ -38,6 +38,22 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       },
     );
 
+    const postNewReviewFn = new lambdanode.NodejsFunction(
+      this,
+      'PostNewReviewFn',
+      {
+        architecture: lambda.Architecture.ARM_64,
+        runtime: lambda.Runtime.NODEJS_18_X,
+        entry: `${__dirname}/../lambdas/postNewReview.ts`,
+        timeout: cdk.Duration.seconds(10),
+        memorySize: 128,
+        environment: {
+          TABLE_NAME: movieReviewsTable.tableName,
+          REGION: 'eu-west-1',
+        },
+      },
+    );
+
     new custom.AwsCustomResource(this, 'moviesddbInitData', {
       onCreate: {
         service: 'DynamoDB',
@@ -56,6 +72,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
 
     // Permissions
     movieReviewsTable.grantReadData(getAllMovieReviewsFn);
+    movieReviewsTable.grantWriteData(postNewReviewFn);
 
     // REST API
     const api = new apig.RestApi(this, 'RestApi', {
@@ -74,9 +91,15 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     // Endpoints
     const moviesEndpoint = api.root.addResource('movies');
     const reviewsEndpoint = moviesEndpoint.addResource('reviews');
+
     reviewsEndpoint.addMethod(
       'GET',
       new apig.LambdaIntegration(getAllMovieReviewsFn, {proxy: true}),
+    );
+
+    reviewsEndpoint.addMethod(
+      'POST',
+      new apig.LambdaIntegration(postNewReviewFn, {proxy: true}),
     );
   }
 }

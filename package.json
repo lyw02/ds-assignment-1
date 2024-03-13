@@ -12,6 +12,8 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.93",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/jwk-to-pem": "^2.0.3",
     "@types/node": "20.4.2",
     "aws-cdk": "2.88.0",
     "esbuild": "^0.18.17",
@@ -27,10 +29,10 @@
     "@aws-sdk/util-dynamodb": "^3.303.0",
     "ajv": "^8.12.0",
     "aws-cdk-lib": "2.88.0",
-    "constructs": "^10.0.0",
-    "source-map-support": "^0.5.21",
     "axios": "^1.1.2",
+    "constructs": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
-    "jwk-to-pem": "^2.0.5"
+    "jwk-to-pem": "^2.0.5",
+    "source-map-support": "^0.5.21"
   }
 }

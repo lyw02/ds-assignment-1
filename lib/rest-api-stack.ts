@@ -21,20 +21,35 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       tableName: 'MovieReviews',
     });
 
+    // User pool
+    const userPoolId = cdk.Fn.importValue('AuthAPIStack-UserPoolId');
+    const userPoolClientId = cdk.Fn.importValue(
+      'AuthAPIStack-UserPoolClientId',
+    );
+
     // Functions
+    const appCommonFnProps = (tableName: string) => {
+      return {
+        architecture: lambda.Architecture.ARM_64,
+        timeout: cdk.Duration.seconds(10),
+        memorySize: 128,
+        runtime: lambda.Runtime.NODEJS_18_X,
+        handler: 'handler',
+        environment: {
+          USER_POOL_ID: userPoolId,
+          CLIENT_ID: userPoolClientId,
+          REGION: cdk.Aws.REGION,
+          TABLE_NAME: tableName,
+        },
+      };
+    };
+
     const getMovieReviewsFn = new lambdanode.NodejsFunction(
       this,
       'GetMovieReviewsFn',
       {
-        architecture: lambda.Architecture.ARM_64,
-        runtime: lambda.Runtime.NODEJS_18_X,
+        ...appCommonFnProps(movieReviewsTable.tableName),
         entry: `${__dirname}/../lambdas/getMovieReviews.ts`,
-        timeout: cdk.Duration.seconds(10),
-        memorySize: 128,
-        environment: {
-          TABLE_NAME: movieReviewsTable.tableName,
-          REGION: 'eu-west-1',
-        },
       },
     );
 
@@ -42,15 +57,8 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       this,
       'GetMovieReviewsByReviewerNameFn',
       {
-        architecture: lambda.Architecture.ARM_64,
-        runtime: lambda.Runtime.NODEJS_18_X,
+        ...appCommonFnProps(movieReviewsTable.tableName),
         entry: `${__dirname}/../lambdas/getMovieReviewsByReviewerName.ts`,
-        timeout: cdk.Duration.seconds(10),
-        memorySize: 128,
-        environment: {
-          TABLE_NAME: movieReviewsTable.tableName,
-          REGION: 'eu-west-1',
-        },
       },
     );
 
@@ -58,15 +66,8 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       this,
       'PostNewReviewFn',
       {
-        architecture: lambda.Architecture.ARM_64,
-        runtime: lambda.Runtime.NODEJS_18_X,
+        ...appCommonFnProps(movieReviewsTable.tableName),
         entry: `${__dirname}/../lambdas/postNewReview.ts`,
-        timeout: cdk.Duration.seconds(10),
-        memorySize: 128,
-        environment: {
-          TABLE_NAME: movieReviewsTable.tableName,
-          REGION: 'eu-west-1',
-        },
       },
     );
 
@@ -86,6 +87,22 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       }),
     });
 
+    // Authorizor
+    const authorizerFn = new lambdanode.NodejsFunction(this, 'AuthorizerFn', {
+      ...appCommonFnProps(''),
+      entry: `${__dirname}/../lambdas/auth/authorizer.ts`,
+    });
+
+    const requestAuthorizer = new apig.RequestAuthorizer(
+      this,
+      'RequestAuthorizer',
+      {
+        identitySources: [apig.IdentitySource.header('cookie')],
+        handler: authorizerFn,
+        resultsCacheTtl: cdk.Duration.minutes(0),
+      },
+    );
+
     // Permissions
     movieReviewsTable.grantReadData(getMovieReviewsFn);
     movieReviewsTable.grantReadData(getMovieReviewsByReviewerNameFn);
@@ -94,6 +111,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     // REST API
     const appApi = new apig.RestApi(this, 'AppApi', {
       description: 'App API',
+      endpointTypes: [apig.EndpointType.REGIONAL],
       deployOptions: {
         stageName: 'dev',
       },
@@ -120,6 +138,10 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     postReviewEndpoint.addMethod(
       'POST',
       new apig.LambdaIntegration(postNewReviewFn, {proxy: true}),
+      {
+        authorizer: requestAuthorizer,
+        authorizationType: apig.AuthorizationType.CUSTOM,
+      },
     );
 
     reviewerEndpoint.addMethod(

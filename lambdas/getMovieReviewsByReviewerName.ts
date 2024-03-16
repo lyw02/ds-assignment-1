@@ -13,7 +13,25 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     const movieId = parameters?.movieId
       ? parseInt(parameters.movieId)
       : undefined;
-    const reviewerName = parameters?.reviewerName;
+    const reviewerNameOrYear = parameters?.reviewerName;
+
+    function isYear(str: string) {
+      if (/^\d{4}$/.test(str)) {
+        const year = parseInt(str, 10);
+        return year >= 1970 && year <= 2099;
+      }
+      return false;
+    }
+
+    type filter = 'reviewDate' | 'reviewerName';
+
+    let filter: filter;
+
+    if (reviewerNameOrYear && isYear(reviewerNameOrYear)) {
+      filter = 'reviewDate';
+    } else {
+      filter = 'reviewerName';
+    }
 
     if (!movieId) {
       return {
@@ -45,9 +63,15 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
       };
     }
 
-    if (reviewerName) {
+    if (reviewerNameOrYear) {
       const filteredItems = commandOutput.Items?.filter(
-        item => item.reviewerName === reviewerName,
+        item => {
+          if (filter === 'reviewDate') {
+            return item.reviewDate.substring(0, 4) === reviewerNameOrYear;
+          } else {
+            return item.reviewerName === reviewerNameOrYear;
+          }
+        },
       );
 
       return {

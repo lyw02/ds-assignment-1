@@ -54,6 +54,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     );
 
     const getMovieReviewsByReviewerNameFn = new lambdanode.NodejsFunction(
+      // Reviewer name or year
       this,
       'GetMovieReviewsByReviewerNameFn',
       {
@@ -145,6 +146,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     );
 
     reviewerEndpoint.addMethod(
+      // Reviewer or year
       'GET',
       new apig.LambdaIntegration(getMovieReviewsByReviewerNameFn, {
         proxy: true,

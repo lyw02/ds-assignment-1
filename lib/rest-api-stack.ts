@@ -53,6 +53,15 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       },
     );
 
+    const getReviewsFn = new lambdanode.NodejsFunction(
+      this,
+      'GetReviewsFn',
+      {
+        ...appCommonFnProps(movieReviewsTable.tableName),
+        entry: `${__dirname}/../lambdas/getReviews.ts`,
+      },
+    );
+
     const getMovieReviewsByReviewerNameFn = new lambdanode.NodejsFunction(
       // Reviewer name or year
       this,
@@ -106,6 +115,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
 
     // Permissions
     movieReviewsTable.grantReadData(getMovieReviewsFn);
+    movieReviewsTable.grantReadData(getReviewsFn);
     movieReviewsTable.grantReadData(getMovieReviewsByReviewerNameFn);
     movieReviewsTable.grantWriteData(postNewReviewFn);
 
@@ -126,15 +136,22 @@ export class RestAPIAssignmentStack extends cdk.Stack {
 
     // Endpoints
     const moviesEndpoint = appApi.root.addResource('movies');
+    const reviewsEndpoint = appApi.root.addResource('reviews');
+    const reviewerEndpoint = reviewsEndpoint.addResource('{reviewerName}');
     const postReviewEndpoint = moviesEndpoint.addResource('reviews');
     const specificMovieEndpoint = moviesEndpoint.addResource('{movieId}');
-    const reviewsEndpoint = specificMovieEndpoint.addResource('reviews');
-    const reviewerEndpoint = reviewsEndpoint.addResource('{reviewerName}');
+    const movieReviewsEndpoint = specificMovieEndpoint.addResource('reviews');
+    const movieReviewerEndpoint = movieReviewsEndpoint.addResource('{reviewerName}');
 
-    reviewsEndpoint.addMethod(
+    movieReviewsEndpoint.addMethod(
       'GET',
       new apig.LambdaIntegration(getMovieReviewsFn, {proxy: true}),
     );
+
+    reviewerEndpoint.addMethod(
+      'GET',
+      new apig.LambdaIntegration(getReviewsFn, {proxy: true}),
+    )
 
     postReviewEndpoint.addMethod(
       'POST',
@@ -145,7 +162,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       },
     );
 
-    reviewerEndpoint.addMethod(
+    movieReviewerEndpoint.addMethod(
       // Reviewer or year
       'GET',
       new apig.LambdaIntegration(getMovieReviewsByReviewerNameFn, {

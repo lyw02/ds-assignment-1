@@ -53,14 +53,10 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       },
     );
 
-    const getReviewsFn = new lambdanode.NodejsFunction(
-      this,
-      'GetReviewsFn',
-      {
-        ...appCommonFnProps(movieReviewsTable.tableName),
-        entry: `${__dirname}/../lambdas/getReviews.ts`,
-      },
-    );
+    const getReviewsFn = new lambdanode.NodejsFunction(this, 'GetReviewsFn', {
+      ...appCommonFnProps(movieReviewsTable.tableName),
+      entry: `${__dirname}/../lambdas/getReviews.ts`,
+    });
 
     const getMovieReviewsByReviewerNameFn = new lambdanode.NodejsFunction(
       // Reviewer name or year
@@ -78,6 +74,15 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       {
         ...appCommonFnProps(movieReviewsTable.tableName),
         entry: `${__dirname}/../lambdas/postNewReview.ts`,
+      },
+    );
+
+    const putMovieReviewFn = new lambdanode.NodejsFunction(
+      this,
+      'PutMovieReviewFn',
+      {
+        ...appCommonFnProps(movieReviewsTable.tableName),
+        entry: `${__dirname}/../lambdas/putMovieReviewFn.ts`,
       },
     );
 
@@ -118,6 +123,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     movieReviewsTable.grantReadData(getReviewsFn);
     movieReviewsTable.grantReadData(getMovieReviewsByReviewerNameFn);
     movieReviewsTable.grantWriteData(postNewReviewFn);
+    movieReviewsTable.grantReadWriteData(putMovieReviewFn);
 
     // REST API
     const appApi = new apig.RestApi(this, 'AppApi', {
@@ -141,7 +147,8 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     const postReviewEndpoint = moviesEndpoint.addResource('reviews');
     const specificMovieEndpoint = moviesEndpoint.addResource('{movieId}');
     const movieReviewsEndpoint = specificMovieEndpoint.addResource('reviews');
-    const movieReviewerEndpoint = movieReviewsEndpoint.addResource('{reviewerName}');
+    const movieReviewerEndpoint =
+      movieReviewsEndpoint.addResource('{reviewerName}');
 
     movieReviewsEndpoint.addMethod(
       'GET',
@@ -151,7 +158,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     reviewerEndpoint.addMethod(
       'GET',
       new apig.LambdaIntegration(getReviewsFn, {proxy: true}),
-    )
+    );
 
     postReviewEndpoint.addMethod(
       'POST',
@@ -168,6 +175,17 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       new apig.LambdaIntegration(getMovieReviewsByReviewerNameFn, {
         proxy: true,
       }),
+    );
+
+    movieReviewerEndpoint.addMethod(
+      'PUT',
+      new apig.LambdaIntegration(putMovieReviewFn, {
+        proxy: true,
+      }),
+      {
+        authorizer: requestAuthorizer,
+        authorizationType: apig.AuthorizationType.CUSTOM,
+      },
     );
   }
 }

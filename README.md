@@ -17,8 +17,6 @@ This repository contains an implementation of a serverless REST API for the AWS 
 + GET /reviews/{reviewerName} - Get all the reviews written by a specific reviewer.
 + GET /reviews/{reviewerName}/{movieId}/translation?language=code - Get a translated version of a movie review using the movie ID and reviewer name as the identifier.
 
-[Include screenshots from the AWS management console (API Gateway service) that clearly show the deployed API ( ensure the font size is legible). ]
-
 ![](./images/api1.png)
 
 ### Authentication.
@@ -34,7 +32,12 @@ This repository contains an implementation of a serverless REST API for the AWS 
   + lib/auth-app-stack.ts
   + lib/rest-api-stack.ts
 
-2. The translation endpoint returns an error related to IAM policies:
+2. Command to deploy/destroy multiple stacks: 
+
+    `ckd deploy --all`
+    `ckd destroy --all`
+
+3. The translation endpoint returns an error related to IAM policies:
     ![](./images/translate1.png)
     However, I have had the permission of translation service in IAM user:
     ![](./images/translate2.png)

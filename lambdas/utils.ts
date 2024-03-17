@@ -6,8 +6,8 @@ import {
 } from 'aws-lambda';
 
 import axios from 'axios';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import jwkToPem, { JWK } from 'jwk-to-pem';
+import jwt, {JwtPayload} from 'jsonwebtoken';
+import jwkToPem, {JWK} from 'jwk-to-pem';
 
 export type CookieMap = {[key: string]: string} | undefined;
 export type JwtToken = {sub: string; email: string} | null;
@@ -54,7 +54,7 @@ export const verifyToken = async (
 
     // return jwt.verify(token, pem, {algorithms: ['RS256']});
     const decoded = jwt.verify(token, pem, {algorithms: ['RS256']});
-    
+
     if (typeof decoded === 'string') {
       return null;
     }
@@ -79,5 +79,18 @@ export const createPolicy = (
         Resource: [event.methodArn],
       },
     ],
+  };
+};
+
+export const apiResponse = (
+  statusCode: number,
+  body: {[key: string]: any},
+) => {
+  return {
+    statusCode: statusCode,
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(body),
   };
 };

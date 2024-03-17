@@ -58,6 +58,15 @@ export class RestAPIAssignmentStack extends cdk.Stack {
       entry: `${__dirname}/../lambdas/getReviews.ts`,
     });
 
+    const getTranslationFn = new lambdanode.NodejsFunction(
+      this,
+      'GetTranslationFn',
+      {
+        ...appCommonFnProps(movieReviewsTable.tableName),
+        entry: `${__dirname}/../lambdas/getTranslation.ts`,
+      },
+    );
+
     const getMovieReviewsByReviewerNameFn = new lambdanode.NodejsFunction(
       // Reviewer name or year
       this,
@@ -95,7 +104,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
             [movieReviewsTable.tableName]: generateBatch(movieReviews),
           },
         },
-        physicalResourceId: custom.PhysicalResourceId.of('moviesddbInitData'), //.of(Date.now().toString()),
+        physicalResourceId: custom.PhysicalResourceId.of('moviesddbInitData'),
       },
       policy: custom.AwsCustomResourcePolicy.fromSdkCalls({
         resources: [movieReviewsTable.tableArn],
@@ -122,6 +131,7 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     movieReviewsTable.grantReadData(getMovieReviewsFn);
     movieReviewsTable.grantReadData(getReviewsFn);
     movieReviewsTable.grantReadData(getMovieReviewsByReviewerNameFn);
+    movieReviewsTable.grantReadData(getTranslationFn);
     movieReviewsTable.grantWriteData(postNewReviewFn);
     movieReviewsTable.grantReadWriteData(putMovieReviewFn);
 
@@ -143,12 +153,14 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     // Endpoints
     const moviesEndpoint = appApi.root.addResource('movies');
     const reviewsEndpoint = appApi.root.addResource('reviews');
-    const reviewerEndpoint = reviewsEndpoint.addResource('{reviewerName}');
-    const postReviewEndpoint = moviesEndpoint.addResource('reviews');
+    const reviewerEndpoint = reviewsEndpoint.addResource('{reviewerName}'); // /reviews/{reviewerName}
+    const reviewerMovieIdEndpoint = reviewerEndpoint.addResource('{movieId}');
+    const translateEndpopint = reviewerMovieIdEndpoint.addResource('translation'); // /reviews/{reviewerName}/{movieId}/translation
+    const postReviewEndpoint = moviesEndpoint.addResource('reviews'); // /movies/reviews
     const specificMovieEndpoint = moviesEndpoint.addResource('{movieId}');
-    const movieReviewsEndpoint = specificMovieEndpoint.addResource('reviews');
+    const movieReviewsEndpoint = specificMovieEndpoint.addResource('reviews'); // /movies/{movieId}/reviews
     const movieReviewerEndpoint =
-      movieReviewsEndpoint.addResource('{reviewerName}');
+      movieReviewsEndpoint.addResource('{reviewerName}'); // /movies/{movieId}/reviews/{reviewerName} or {year}
 
     movieReviewsEndpoint.addMethod(
       'GET',
@@ -158,6 +170,11 @@ export class RestAPIAssignmentStack extends cdk.Stack {
     reviewerEndpoint.addMethod(
       'GET',
       new apig.LambdaIntegration(getReviewsFn, {proxy: true}),
+    );
+
+    translateEndpopint.addMethod(
+      'GET',
+      new apig.LambdaIntegration(getTranslationFn, {proxy: true}),
     );
 
     postReviewEndpoint.addMethod(

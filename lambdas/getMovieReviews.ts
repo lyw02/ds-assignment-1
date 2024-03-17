@@ -29,7 +29,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
 
     if (queryParams && !isValidQueryParams(queryParams)) {
       // Invalid query params
-      return apiResponse(500, {Message: 'Invalid min rating'});
+      return apiResponse(500, {Message: 'Invalid min rating', queryParams: queryParams});
     } else if (
       queryParams &&
       isValidQueryParams(queryParams) &&

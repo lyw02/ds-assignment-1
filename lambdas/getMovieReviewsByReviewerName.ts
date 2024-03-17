@@ -2,6 +2,7 @@ import {APIGatewayProxyHandlerV2} from 'aws-lambda';
 
 import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
 import {DynamoDBDocumentClient, QueryCommand} from '@aws-sdk/lib-dynamodb';
+import {apiResponse} from './utils';
 
 const ddbDocClient = createDDbDocClient();
 
@@ -34,13 +35,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     }
 
     if (!movieId) {
-      return {
-        statusCode: 404,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({Message: 'MovieId is NaN'}),
-      };
+      return apiResponse(404, {Message: 'MovieId is NaN'});
     }
 
     const commandOutput = await ddbDocClient.send(
@@ -54,56 +49,26 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     );
 
     if (commandOutput.Items?.length === 0) {
-      return {
-        statusCode: 404,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({Message: 'Invalid movieId'}),
-      };
+      return apiResponse(404, {Message: 'Invalid movieId'});
     }
 
     if (reviewerNameOrYear) {
-      const filteredItems = commandOutput.Items?.filter(
-        item => {
-          if (filter === 'reviewDate') {
-            return item.reviewDate.substring(0, 4) === reviewerNameOrYear;
-          } else {
-            return item.reviewerName === reviewerNameOrYear;
-          }
-        },
-      );
+      const filteredItems = commandOutput.Items?.filter(item => {
+        if (filter === 'reviewDate') {
+          return item.reviewDate.substring(0, 4) === reviewerNameOrYear;
+        } else {
+          return item.reviewerName === reviewerNameOrYear;
+        }
+      });
 
-      return {
-        statusCode: 200,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          data: filteredItems,
-        }),
-      };
+      return apiResponse(200, {data: filteredItems});
     } else {
-      return {
-        statusCode: 200,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          data: commandOutput.Items,
-        }),
-      };
+      return apiResponse(200, {data: commandOutput.Items});
     }
   } catch (error: any) {
     console.log(JSON.stringify(error));
 
-    return {
-      statusCode: 500,
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({error}),
-    };
+    return apiResponse(500, {error});
   }
 };
 

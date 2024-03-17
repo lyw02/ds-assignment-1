@@ -1,11 +1,8 @@
 import {APIGatewayProxyHandlerV2} from 'aws-lambda';
 
 import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
-import {
-  DynamoDBDocumentClient,
-  QueryCommand,
-  ScanCommand,
-} from '@aws-sdk/lib-dynamodb';
+import {DynamoDBDocumentClient, ScanCommand} from '@aws-sdk/lib-dynamodb';
+import {apiResponse} from './utils';
 
 const ddbDocClient = createDDbDocClient();
 
@@ -19,13 +16,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
       : undefined;
 
     if (!reviewerName) {
-      return {
-        statusCode: 404,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({Message: 'Reviewer name is missing'}),
-      };
+      return apiResponse(404, {Message: 'Reviewer name is missing'});
     }
     const commandOutput = await ddbDocClient.send(
       new ScanCommand({
@@ -38,34 +29,13 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     );
 
     if (commandOutput.Items?.length === 0) {
-      return {
-        statusCode: 404,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({Message: 'Invalid reviewerName'}),
-      };
+      return apiResponse(404, {Message: 'Invalid reviewerName'});
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        data: commandOutput.Items,
-      }),
-    };
+    return apiResponse(200, {data: commandOutput.Items});
   } catch (error: any) {
     console.log(JSON.stringify(error));
-
-    return {
-      statusCode: 500,
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({error}),
-    };
+    return apiResponse(500, {error});
   }
 };
 

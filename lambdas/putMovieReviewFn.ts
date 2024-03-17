@@ -6,6 +6,7 @@ import {
   QueryCommand,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
+import {apiResponse} from './utils';
 
 const ddbDocClient = createDDbDocClient();
 
@@ -20,13 +21,7 @@ export const handler: Handler = async (event, context) => {
     const reviewerName = parameters?.reviewerName;
 
     if (!movieId) {
-      return {
-        statusCode: 404,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({Message: 'MovieId is NaN'}),
-      };
+      return apiResponse(404, {Message: 'MovieId is NaN'});
     }
 
     const queryCommandOutput = await ddbDocClient.send(
@@ -40,13 +35,7 @@ export const handler: Handler = async (event, context) => {
     );
 
     if (queryCommandOutput.Items?.length === 0) {
-      return {
-        statusCode: 404,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({Message: 'Invalid movieId'}),
-      };
+      return apiResponse(404, {Message: 'Invalid movieId'});
     }
 
     let filteredItem;
@@ -55,25 +44,13 @@ export const handler: Handler = async (event, context) => {
         item => item.reviewerName === reviewerName,
       );
     } else {
-      return {
-        statusCode: 404,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({Message: 'Reviewer name is missing'}),
-      };
+      return apiResponse(404, {Message: 'Reviewer name is missing'});
     }
 
     const body = event.body ? JSON.parse(event.body) : undefined;
 
     if (!body) {
-      return {
-        statusCode: 500,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({message: 'Missing request body'}),
-      };
+      return apiResponse(500, {Message: 'Missing request body'});
     }
 
     const commandOutput = await ddbDocClient.send(
@@ -81,9 +58,10 @@ export const handler: Handler = async (event, context) => {
         TableName: process.env.TABLE_NAME,
         Key: {
           movieId: filteredItem!.movieId,
-          reviewerName: filteredItem!.reviewerName
+          reviewerName: filteredItem!.reviewerName,
         },
-        UpdateExpression: 'SET content = :content, rating = :rating, reviewDate = :reviewDate',
+        UpdateExpression:
+          'SET content = :content, rating = :rating, reviewDate = :reviewDate',
         ExpressionAttributeValues: {
           ':content': body.content,
           ':rating': body.rating,
@@ -92,23 +70,11 @@ export const handler: Handler = async (event, context) => {
       }),
     );
 
-    return {
-      statusCode: 201,
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({message: 'Review updated'}),
-    };
+    return apiResponse(200, {Message: 'Review updated'});
   } catch (error: any) {
     console.log(JSON.stringify(error));
 
-    return {
-      statusCode: 500,
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({error}),
-    };
+    return apiResponse(500, {error});
   }
 };
 

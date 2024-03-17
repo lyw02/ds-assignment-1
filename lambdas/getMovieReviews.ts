@@ -1,12 +1,10 @@
 import {APIGatewayProxyHandlerV2} from 'aws-lambda';
 
 import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
-import {
-  DynamoDBDocumentClient,
-  QueryCommand,
-} from '@aws-sdk/lib-dynamodb';
+import {DynamoDBDocumentClient, QueryCommand} from '@aws-sdk/lib-dynamodb';
 import Ajv from 'ajv';
 import schema from '../shared/types.schema.json';
+import {apiResponse} from './utils';
 
 const ajv = new Ajv();
 const isValidQueryParams = ajv.compile(
@@ -26,24 +24,12 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
     const queryParams = event?.queryStringParameters;
 
     if (!movieId) {
-      return {
-        statusCode: 404,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({Message: 'MovieId is NaN'}),
-      };
+      return apiResponse(404, {Message: 'MovieId is NaN'});
     }
 
     if (queryParams && !isValidQueryParams(queryParams)) {
       // Invalid query params
-      return {
-        statusCode: 500,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({Message: 'Invalid min rating'}),
-      };
+      return apiResponse(500, {Message: 'Invalid min rating'});
     } else if (
       queryParams &&
       isValidQueryParams(queryParams) &&
@@ -63,30 +49,14 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
       );
 
       if (commandOutput.Items?.length === 0) {
-        return {
-          statusCode: 404,
-          headers: {
-            'content-type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: 'Invalid movieId.',
-          }),
-        };
+        return apiResponse(404, {Message: 'Invalid movieId'});
       }
 
       const filteredItems = commandOutput.Items?.filter(
         item => item.rating >= minRating,
       );
 
-      return {
-        statusCode: 200,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          data: filteredItems,
-        }),
-      };
+      return apiResponse(200, {data: filteredItems});
     } else {
       // No query params
       const commandOutput = await ddbDocClient.send(
@@ -100,35 +70,15 @@ export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
       );
 
       if (commandOutput.Items?.length === 0) {
-        return {
-          statusCode: 404,
-          headers: {
-            'content-type': 'application/json',
-          },
-          body: JSON.stringify({Message: 'Invalid movieId'}),
-        };
+        return apiResponse(404, {Message: 'Invalid movieId'});
       }
 
-      return {
-        statusCode: 200,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          data: commandOutput.Items,
-        }),
-      };
+      return apiResponse(200, {data: commandOutput.Items});
     }
   } catch (error: any) {
     console.log(JSON.stringify(error));
 
-    return {
-      statusCode: 500,
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({error}),
-    };
+    return apiResponse(500, {error});
   }
 };
 

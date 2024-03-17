@@ -5,6 +5,7 @@ import {
   DynamoDBDocumentClient,
   PutCommand,
 } from '@aws-sdk/lib-dynamodb';
+import { apiResponse } from './utils';
 
 const ddbDocClient = createDDbDocClient();
 
@@ -15,13 +16,7 @@ export const handler: Handler = async (event, context) => {
     const body = event.body ? JSON.parse(event.body) : undefined;
 
     if (!body) {
-      return {
-        statusCode: 500,
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({message: 'Missing request body'}),
-      };
+      return apiResponse(500, {message: 'Missing request body'})
     }
 
     const commandOutput = await ddbDocClient.send(
@@ -31,23 +26,11 @@ export const handler: Handler = async (event, context) => {
       }),
     );
 
-    return {
-      statusCode: 201,
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({message: 'Review added'}),
-    };
+    return apiResponse(200, {message: 'Review added'})
   } catch (error: any) {
     console.log(JSON.stringify(error));
 
-    return {
-      statusCode: 500,
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({error}),
-    };
+    return apiResponse(500, {error})
   }
 };
 
